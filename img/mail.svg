@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="40.341347mm"
+   height="29.030691mm"
+   viewBox="0 0 40.341347 29.030691"
+   version="1.1"
+   id="svg965"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="mail.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview967"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.74208053"
+     inkscape:cx="113.19526"
+     inkscape:cy="106.45745"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
+     inkscape:window-x="0"
+     inkscape:window-y="29"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs962" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-75.009733,-120.44814)">
+    <g
+       transform="matrix(0.89401432,0,0,0.89401432,-326.28349,-363.96487)"
+       id="layer1-7"
+       inkscape:label="Calque 1">
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="C:\Users\lguyot\Desktop\icon-email.png"
+         transform="translate(-560.1901,271.89114)"
+         id="g6564">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.95203;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+           id="rect4024"
+           height="29.520258"
+           width="42.171795"
+           y="271.4252"
+           x="1010.5328" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.95202;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+           inkscape:connector-curvature="0"
+           id="path4026"
+           d="m 1052.277,300.89089 h -41.3137 l 20.6575,-18.41503 z" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.95199;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+           inkscape:connector-curvature="0"
+           id="path4028"
+           d="m 1010.5379,272.16721 h 42.1582 l -21.0798,18.41503 z" />
+      </g>
+    </g>
+  </g>
+</svg>
