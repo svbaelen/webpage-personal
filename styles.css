@@ -7,6 +7,7 @@
     font-weight: 100 900;
     font-stretch: 75% 125%;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -16,75 +17,142 @@
     font-weight: 100 900;
     font-stretch: 75% 125%;
     font-style: normal;
+    font-display: swap;
+}
+
+/* Theme — warm dark (ink + amber) */
+
+:root {
+    --bg: #0e0e10;
+    --text: #ece8e1;
+    --muted: #9a958c;
+    --accent: #e0a458;
+    --accent-soft: rgba(224, 164, 88, 0.5);
 }
 
 /* General */
 
+* {
+    box-sizing: border-box;
+}
+
 html,
 body {
     height: 100%;
-    max-height:100%;
     width: 100%;
     margin: 0;
-    background-color: rgba(16, 11, 32, 1);
-    font-family: "Manrope";
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Manrope", system-ui, sans-serif;
     font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 #about {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
 
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
-    align-items: center;
-    letter-spacing:0.05em;
+    align-items: flex-start;
 
-    color: rgba(255, 255, 255, 1);
+    padding: 48px 24px;
+    gap: 36px;
 
+    letter-spacing: 0.04em;
     font-size: 16px;
+    line-height: 1.65;
 
-    gap: 20px;
+    /* center the column of items as a group */
+    align-content: center;
 }
+
 .about-item {
-    max-width:300px;
-    width:300px;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
 }
 
 @media screen and (min-width: 800px) {
-  #about {
-    font-size: 18px;
-  }
-  .about-item {
-      max-width:480px;
-      width:480px;
-  }
+    #about {
+        font-size: 18px;
+        gap: 40px;
+    }
+    .about-item {
+        max-width: 520px;
+    }
 }
+
+/* Intro */
 
 #title {
-    font-size:1.25em;
+    margin: 0 0 0.6em 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    letter-spacing: 0.01em;
 }
 
-.medweight {
-    font-weight:550;
+.bio {
+    margin: 0;
+    color: var(--text);
 }
 
-code {
-    letter-spacing:0px;
-    font-family: "Roboto Mono", monospace;
+/* Links section */
+
+#links .label {
+    margin: 0 0 0.4em 0;
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
 }
+
+#links ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#links li {
+    padding: 0.18em 0;
+}
+
+#links .role {
+    color: var(--muted);
+    font-size: 0.85em;
+}
+
+#links .role::before {
+    content: "· ";
+}
+
+/* Anchors */
 
 #about a {
-    /*text-decoration:none;*/
-    text-decoration-color:rgba(84, 151, 167, 1);
-    text-decoration-thickness: 2px;
-    color: rgba(255, 255, 255, 1);
+    color: var(--text);
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent-soft), var(--accent-soft));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    transition: background-size 0.2s ease, color 0.2s ease;
 }
 
-#about a:hover {
-    color: rgba(255, 255, 255, 0.8);
+#about a:hover,
+#about a:focus-visible {
+    color: var(--accent);
+    background-size: 100% 100%;
+    background-image: linear-gradient(
+        rgba(224, 164, 88, 0.12),
+        rgba(224, 164, 88, 0.12)
+    );
+    outline: none;
 }
+
+/* Contact */
 
 #contact {
     display: flex;
@@ -92,7 +160,35 @@ code {
 }
 
 #mail-img {
+    height: 0.8em;
     margin-top: 0.15em;
-    height:0.8em;
     padding-right: 10px;
+}
+
+code {
+    letter-spacing: 0;
+    font-family: "Roboto Mono", monospace;
+    color: var(--text);
+}
+
+/* Entrance */
+
+@media (prefers-reduced-motion: no-preference) {
+    .about-item {
+        animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    #intro { animation-delay: 0.02s; }
+    #links { animation-delay: 0.12s; }
+    #contact { animation-delay: 0.22s; }
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 }
