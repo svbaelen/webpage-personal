@@ -3,6 +3,8 @@ set -euo pipefail
 
 REMOTE="${TALKS_REMOTE:-git@github.com:svbaelen/webpage-personal.git}"
 REPO_DIR="${TALKS_REPO_DIR:-$HOME/.cache/webpage-personal}"
+# Unlisted, hard-to-guess public subpath. Override only for tests.
+HUB_DIR="${TALKS_HUB_DIR:-p-b1eb7913}"
 
 slugify() {
   printf '%s' "$1" \
@@ -75,7 +77,7 @@ git_push_retry() {
 }
 
 manifest_upsert() {  # args: slug title date tags project type desc file
-  local m="$REPO_DIR/talks/manifest.json" tmp
+  local m="$REPO_DIR/$HUB_DIR/manifest.json" tmp
   tmp="$(mktemp)"
   [ -f "$m" ] || echo '[]' > "$m"
   # tags: comma list -> json array (empty string -> [])
@@ -94,33 +96,37 @@ manifest_upsert() {  # args: slug title date tags project type desc file
 if [ "$CMD" = "publish" ]; then
   ensure_repo
   [ -n "$SLUG" ] || SLUG="$(slugify "$TITLE")"
+  SLUG="$(slugify "$SLUG")"  # normalize even an explicit --slug (no path traversal)
   [ -n "$SLUG" ] || die "could not derive slug from title"
   [ -n "$DATE" ] || DATE="$(date +%F)"
   [ -n "$TITLE" ] || TITLE="$SLUG"
-  mkdir -p "$REPO_DIR/talks/slides"
-  cp "$FILE" "$REPO_DIR/talks/slides/$SLUG.html"
+  mkdir -p "$REPO_DIR/$HUB_DIR/slides"
+  cp "$FILE" "$REPO_DIR/$HUB_DIR/slides/$SLUG.html"
   manifest_upsert "$SLUG" "$TITLE" "$DATE" "$TAGS" "$PROJECT" "$TYPE" \
     "$DESC" "slides/$SLUG.html"
-  git -C "$REPO_DIR" add talks
+  git -C "$REPO_DIR" add "$HUB_DIR"
   git -C "$REPO_DIR" commit -q -m "Publish talk: $SLUG"
   git_push_retry
-  printf 'Published: https://svbaelen.me/talks/slides/%s.html\n' "$SLUG"
+  printf 'Published: https://svbaelen.me/%s/slides/%s.html\n' "$HUB_DIR" "$SLUG"
 fi
 
 if [ "$CMD" = "list" ]; then
   ensure_repo
-  m="$REPO_DIR/talks/manifest.json"
+  m="$REPO_DIR/$HUB_DIR/manifest.json"
   [ -f "$m" ] || { echo "(no talks yet)"; exit 0; }
   jq -r '.[] | "\(.slug) | \(.date) | \(.title)"' "$m"
 fi
 
 if [ "$CMD" = "remove" ]; then
   [ -n "$SLUG" ] || die "--remove requires a slug"
+  SLUG="$(slugify "$SLUG")"  # match stored (slugified) slugs; no path traversal
   ensure_repo
-  m="$REPO_DIR/talks/manifest.json"; tmp="$(mktemp)"
+  m="$REPO_DIR/$HUB_DIR/manifest.json"
+  [ -f "$m" ] || die "no manifest at $HUB_DIR/manifest.json"
+  tmp="$(mktemp)"
   jq --arg s "$SLUG" 'map(select(.slug != $s))' "$m" > "$tmp" && mv "$tmp" "$m"
-  rm -f "$REPO_DIR/talks/slides/$SLUG.html"
-  git -C "$REPO_DIR" add talks
+  rm -f "$REPO_DIR/$HUB_DIR/slides/$SLUG.html"
+  git -C "$REPO_DIR" add "$HUB_DIR"
   git -C "$REPO_DIR" commit -q -m "Remove talk: $SLUG"
   git_push_retry
   printf 'Removed: %s\n' "$SLUG"

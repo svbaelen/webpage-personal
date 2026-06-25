@@ -49,6 +49,7 @@ git -C "$SEED" push -q origin HEAD:master 2>/dev/null \
 
 export TALKS_REMOTE="$BARE"
 export TALKS_REPO_DIR="$TMP/cache"
+export TALKS_HUB_DIR="talks"   # pin hub dir for tests (prod default is a token)
 export GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@t \
        GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@t
 
@@ -78,6 +79,14 @@ bash "$SCRIPT" --remove hello-world >/dev/null
 check "remove drops manifest entry" '[ "$(jq length "$M")" = "0" ]'
 check "remove deletes slide file" \
   '[ ! -f "$TALKS_REPO_DIR/talks/slides/hello-world.html" ]'
+
+# --- slug sanitization: a crafted --slug cannot escape slides/ ------------
+bash "$SCRIPT" "$TMP/talk.html" --slug "../../evil" --title "x" >/dev/null
+check "crafted --slug is sanitized to a safe name" \
+  '[ -f "$TALKS_REPO_DIR/talks/slides/evil.html" ]'
+check "crafted --slug writes nothing outside slides/" \
+  '[ ! -e "$TALKS_REPO_DIR/evil.html" ]'
+bash "$SCRIPT" --remove "../../evil" >/dev/null
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]
