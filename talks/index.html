@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Talks &amp; Slides — Senne Van Baelen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      .search { width: 100%; padding: .6em .8em; font: inherit;
+                margin: 1.2em 0; box-sizing: border-box; }
+      .talk { padding: .8em 0; border-top: 1px solid currentColor; }
+      .talk h2 { margin: 0 0 .2em; font-size: 1.05rem; }
+      .talk .meta { opacity: .7; font-size: .85rem; }
+      .talk .tags span { display: inline-block; margin-right: .4em;
+                         opacity: .8; font-size: .8rem; }
+      .empty { opacity: .6; }
+    </style>
+  </head>
+  <body>
+    <main id="about">
+      <section class="about-item">
+        <h1 id="title">Talks &amp; Slides</h1>
+        <input id="search" class="search" type="search"
+               placeholder="Search by title, tag, project…"
+               autocomplete="off" aria-label="Search talks">
+        <div id="list"></div>
+      </section>
+    </main>
+    <script>
+      const listEl = document.getElementById('list');
+      const searchEl = document.getElementById('search');
+      let talks = [];
+
+      const esc = s => (s ?? '').replace(/[&<>"]/g, c => (
+        {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+      function haystack(t) {
+        return [t.title, t.project, t.description, (t.tags||[]).join(' ')]
+          .join(' ').toLowerCase();
+      }
+
+      function render(items) {
+        if (!items.length) {
+          listEl.innerHTML = '<p class="empty">No talks found.</p>';
+          return;
+        }
+        listEl.innerHTML = items.map(t => `
+          <article class="talk">
+            <h2><a href="${esc(t.file)}">${esc(t.title)}</a></h2>
+            <div class="meta">${esc(t.date)}${
+              t.project ? ' · ' + esc(t.project) : ''}${
+              t.type ? ' · ' + esc(t.type) : ''}</div>
+            ${t.description ? `<p>${esc(t.description)}</p>` : ''}
+            <div class="tags">${(t.tags||[]).map(
+              x => `<span>#${esc(x)}</span>`).join('')}</div>
+          </article>`).join('');
+      }
+
+      function apply() {
+        const q = searchEl.value.trim().toLowerCase();
+        render(!q ? talks : talks.filter(t => haystack(t).includes(q)));
+      }
+
+      fetch('manifest.json')
+        .then(r => r.json())
+        .then(data => { talks = data; apply(); })
+        .catch(() => { listEl.innerHTML =
+          '<p class="empty">Could not load talks.</p>'; });
+
+      searchEl.addEventListener('input', apply);
+    </script>
+  </body>
+</html>
