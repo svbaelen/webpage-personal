@@ -37,4 +37,24 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-echo "cmd=$CMD title=$TITLE slug=$SLUG file=$FILE"  # placeholder; later tasks replace
+require_deps() {
+  command -v git >/dev/null 2>&1 || die "git is required"
+  command -v jq  >/dev/null 2>&1 || die "jq is required"
+}
+
+[ "$CMD" = "help" ] && { cat <<'EOF'
+Usage: publish-talk <file.html> --title "..." [--slug s] [--tags a,b]
+                     [--project p] [--type talk] [--date YYYY-MM-DD] [--desc "..."]
+       publish-talk --list
+       publish-talk --remove <slug>
+EOF
+exit 0; }
+
+require_deps
+
+if [ "$CMD" = "publish" ]; then
+  [ -n "$FILE" ] || die "no input HTML file given"
+  [ -f "$FILE" ] || die "file not found: $FILE"
+  case "$FILE" in *.html) ;; *) die "input must be a .html file";; esac
+  [ -n "$TITLE" ] || [ -n "$SLUG" ] || die "--title (or --slug) is required"
+fi

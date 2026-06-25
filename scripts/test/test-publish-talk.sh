@@ -20,5 +20,19 @@ check "slugify collapses punctuation/repeats" \
 check "slugify trims leading/trailing hyphens" \
   '[ "$(slugify "  Hello, World.  ")" = "hello-world" ]'
 
+# --- validation checks (invoke the script as a subprocess) ----------------
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+echo '<!doctype html><title>x</title>' > "$TMP/talk.html"
+
+check "publish without file fails" \
+  '! bash "$SCRIPT" --title "X" 2>/dev/null'
+check "publish without title or slug fails" \
+  '! bash "$SCRIPT" "$TMP/talk.html" 2>/dev/null'
+check "publish with non-html file fails" \
+  '! bash "$SCRIPT" --title "X" "$TMP/notes.txt" 2>/dev/null'
+check "publish with missing file fails" \
+  '! bash "$SCRIPT" --title "X" "$TMP/nope.html" 2>/dev/null'
+
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]
