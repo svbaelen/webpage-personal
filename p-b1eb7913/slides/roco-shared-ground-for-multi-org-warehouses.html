@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROCO — Shared Ground for Multi-Org Warehouses</title>
+<style>
+  :root{
+    --bg:#0f1620; --bg2:#141d2a; --ink:#eef2f7; --mut:#9fb0c3; --dim:#6b7d92;
+    --line:#26323f; --accent:#36c2a8; --accent2:#f0a23c; --warn:#e2683f;
+    --card:#16202d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);overflow:hidden}
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    align-items:center;padding:4.5vh 3.5vw;animation:fade .35s ease}
+  .slide.on{display:flex}
+  .wrap{width:100%;max-width:1280px;margin:0 auto}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:18px;font-weight:600}
+  h1{font-size:clamp(34px,5.6vw,70px);line-height:1.05;margin:0 0 20px;font-weight:700;letter-spacing:-.02em}
+  h2{font-size:clamp(27px,3.9vw,46px);line-height:1.1;margin:0 0 24px;font-weight:700;letter-spacing:-.01em}
+  p.lead{font-size:clamp(18px,1.95vw,24px);color:var(--mut);max-width:66ch;line-height:1.5;margin:0 0 14px}
+  .big{font-size:clamp(24px,2.7vw,34px);line-height:1.35;max-width:24ch;font-weight:600}
+  ul{margin:8px 0 0;padding:0;list-style:none;max-width:70ch}
+  li{font-size:clamp(17px,1.85vw,23px);color:var(--ink);padding:10px 0 10px 32px;position:relative;line-height:1.4}
+  li:before{content:"▸";position:absolute;left:0;color:var(--accent)}
+  li.dim{color:var(--mut)}
+  .mut{color:var(--mut)}
+  .accent{color:var(--accent)}
+  .amber{color:var(--accent2)}
+  .warn{color:var(--warn)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:90ch}
+  .col3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:100ch}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card h3{margin:0 0 8px;font-size:clamp(17px,1.5vw,20px)}
+  .card p{margin:0;color:var(--mut);font-size:clamp(14.5px,1.25vw,17px);line-height:1.45}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--dim);border:1px solid var(--line);border-radius:99px;padding:3px 10px;margin-bottom:10px}
+  .stat{font-size:clamp(40px,7vw,84px);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .statrow{display:flex;gap:48px;flex-wrap:wrap;margin-top:10px}
+  .statrow .mut{font-size:15px;max-width:18ch;margin-top:6px}
+  .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 15px;font-size:14.5px}
+  .step.hot{border-color:var(--accent);color:var(--accent)}
+  .arr{color:var(--dim)}
+  .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;max-width:80ch}
+  .vs .mid{color:var(--dim);font-weight:700;font-size:20px}
+  .panelbad{border-color:#3a2a26;background:#1c1411}
+  .footline{position:absolute;left:9vw;right:9vw;bottom:3.4vh;display:flex;justify-content:space-between;
+    align-items:center;font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s}
+  .nav{position:fixed;bottom:14px;right:18px;font-size:12px;color:var(--dim);user-select:none}
+  .quote{font-size:clamp(24px,3.1vw,40px);font-weight:600;line-height:1.3;max-width:26ch}
+  .brand{font-weight:800;letter-spacing:-.02em}
+  .pill2{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:3px 10px;color:var(--mut)}
+  .hl{background:linear-gradient(transparent 60%, rgba(54,194,168,.22) 0);padding:0 2px}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(54,194,168,.4)}
+  a:hover{border-bottom-color:var(--accent);background:rgba(54,194,168,.08)}
+  .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .linkcard{display:flex;flex-direction:column;gap:3px;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:12px 15px;text-decoration:none;border-bottom:1px solid var(--line);min-width:180px}
+  .linkcard:hover{border-color:var(--accent);background:var(--card)}
+  .linkcard .lt{font-size:14.5px;color:var(--ink);font-weight:600}
+  .linkcard .ld{font-size:12px;color:var(--mut)}
+  .linkcard .lf{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--dim)}
+
+  /* mobile: stack multi-column layouts, let slides scroll, declutter the footer */
+  @media (max-width:760px){
+    .slide{padding:5vh 6vw 9vh;justify-content:safe center;overflow-y:auto}
+    .cols,.col3,.vs{grid-template-columns:1fr;gap:14px}
+    .vs .mid{transform:rotate(90deg)}
+    .statrow{gap:24px}
+    h1{font-size:clamp(32px,9vw,52px)}
+    h2{font-size:clamp(26px,7.5vw,40px)}
+    .footline{left:5vw;right:5vw;bottom:0;background:var(--bg);padding:9px 0;font-size:11px}
+    .nav{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide on">
+    <div class="kicker">ROCO · Workshop</div>
+    <h1>One language.<br>For all your automation flows.</h1>
+    <p class="lead" style="font-size:clamp(20px,2.4vw,30px);color:var(--accent);font-weight:700;margin-bottom:22px;letter-spacing:-.01em">ROCO — now we're talking.</p>
+    <p class="lead">ROCO stops being a per-company dashboard and becomes the room where the operator, the integrator and the OEM solve problems together — on the same data, in real time. That’s the wedge that lands customers at ramp-up and keeps them for the life of the site.</p>
+    <div class="footline"><span class="brand">ROCO</span><span>The problem &amp; the opportunity</span></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="kicker">The reality</div>
+    <h2>A robotic warehouse is never one company</h2>
+    <div class="col3">
+      <div class="card"><span class="tag">Operator</span><h3>The customer</h3><p>Runs the floor, owns the SLA to <em>their</em> customers, lives the daily pain — but doesn’t know the robots deeply.</p></div>
+      <div class="card"><span class="tag">Integrator</span><h3>The vendor</h3><p>Commissioned the system, knows the fleet best, supports many sites — but isn’t on the floor every shift.</p></div>
+      <div class="card"><span class="tag">OEM · WMS · us</span><h3>The makers</h3><p>Robot OEMs, software vendors, ROCO itself — each holds a piece of the truth.</p></div>
+    </div>
+    <p class="lead" style="margin-top:24px">Three+ organizations, <span class="accent">one shared floor</span> — each holding a piece of the truth, <span class="accent">none of them owning the whole</span>. And today they each see a different version of reality.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="kicker">The problem today</div>
+    <h2>Coordination happens <span class="warn">everywhere except the data</span></h2>
+    <ul>
+      <li>Today the problem moves over <b>email, calls, Teams threads and spreadsheets</b> — detached from the metric that triggered it.</li>
+      <li>ROCO itself is scoped <em>per organization</em> — so even two orgs on the <b>same site</b> can’t see each other’s issues.</li>
+      <li>By the time a problem reaches the one person who can fix it, the context — the chart, the robot, the moment — is gone.</li>
+      <li class="dim">The bill: slow resolution, finger-pointing, and a customer who feels alone on the hard days.</li>
+    </ul>
+  </section>
+
+  <!-- cost -->
+  <section class="slide">
+    <div class="kicker">The cost of the status quo</div>
+    <h2>Misalignment is expensive — it just hides on <span class="warn">three different bills</span></h2>
+    <div class="col3">
+      <div class="card"><span class="tag">Vendor time</span><h3>Triaging noise</h3><p>Engineers burn hours on “urgent” tickets that turn out to be expected behaviour — time stolen from the few issues that actually matter.</p></div>
+      <div class="card"><span class="tag">Lost throughput</span><h3>Silent faults</h3><p>A real problem nobody escalated lingers for days. In an automated DC, stopped robots are stopped revenue.</p></div>
+      <div class="card"><span class="tag">The relationship</span><h3>Churn risk</h3><p>“We felt alone every time it broke” is how a flagship account quietly stops being a reference you can use.</p></div>
+    </div>
+    <p class="lead" style="margin-top:20px"><span class="mut">Illustrative:</span> if <b>1 in 3</b> escalations is really “expected,” and just <b>one</b> real stoppage a week is caught <b>a day sooner</b> — the funnel pays for itself in weeks. <span class="mut">(Plug in your site’s numbers.)</span></p>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="kicker">The core tension</div>
+    <h2>Two failure modes — and most tools pick one</h2>
+    <div class="vs">
+      <div class="card panelbad">
+        <span class="tag">If filing is too easy</span>
+        <h3 class="warn">Ticket spam</h3>
+        <p>The customer files hundreds of flags. Many are noise or “expected behaviour.” The vendor drowns, stops reading, trust erodes.</p>
+      </div>
+      <div class="mid">vs</div>
+      <div class="card panelbad">
+        <span class="tag">If filing is too hard</span>
+        <h3 class="warn">Silence</h3>
+        <p>Real problems never get raised. They surface weeks later as “why didn’t anyone tell us?” — the most expensive kind of issue.</p>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:22px">The win is a third path: <span class="hl">cheap to flag, curated to promote.</span></p>
+  </section>
+
+  <!-- vignette -->
+  <section class="slide">
+    <div class="kicker">A Tuesday in Zone B</div>
+    <h2>Same event — <span class="warn">two</span> very different days</h2>
+    <div class="vs">
+      <div class="card panelbad">
+        <span class="tag">Today</span>
+        <p>Operator sees reach-trucks stalling. Screenshots a chart, emails the integrator. Two days of “can you send the logs?” while Zone B limps. Toyota finally replies: <em>“that’s the charging window — expected.”</em> Two days lost to a non-issue.</p>
+      </div>
+      <div class="mid">→</div>
+      <div class="card">
+        <span class="tag accent">With shared ROCO</span>
+        <p>Operator taps ⚑ on the exact signal. ROCO instantly shows <span class="accent">“92% match: charging excluded — expected.”</span> The flag self-resolves in 30 seconds. The one <em>real</em> fault that day reaches a named Toyota owner before lunch.</p>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:20px">Same data, same people — the difference is whether they’re in the <span class="accent">same room</span>.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="kicker">The sharpest moment</div>
+    <h2>Warehouse <span class="amber">start-up &amp; ramp-up</span> is where it hurts most</h2>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>Commissioning a new site = thousands of unknowns and daily firefights.</li>
+          <li>Integrator and customer are in the room together — but with no shared source of truth.</li>
+          <li>Every anomaly becomes a debate: <em>“is that the robots, the layout, the WMS, or the data?”</em></li>
+          <li>It’s the highest-stress, <span class="warn">highest-churn-risk</span> phase of the whole relationship.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">The opening</span>
+        <p class="big">If ROCO is the shared ground from <span class="accent">day one of ramp-up</span>, it becomes infrastructure — not a dashboard you add later.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <div class="kicker">The insight</div>
+    <p class="quote">The vendor usually knows <span class="accent">“that’s expected”</span> faster than the customer knows <span class="amber">“that’s a fire.”</span></p>
+    <p class="lead" style="margin-top:26px">Expertise is <em>asymmetric</em> — and that asymmetry is the opportunity, not the problem. The system should make it cheap to apply the vendor’s knowledge to the customer’s observations.</p>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <div class="kicker">The opportunity</div>
+    <h2>ROCO as the <span class="accent">neutral shared ground</span></h2>
+    <p class="lead">A place where every organization on a site flags, classifies, owns and resolves issues against <em>one</em> set of data — instead of arguing across three inboxes. The party that sold you the robots can’t also be the sole scorekeeper of whether they work: ROCO normalizes <span class="accent">every vendor</span> — any robot OEM, any WMS — into one schema, so the scoreboard is brand-agnostic and <span class="accent">owned by no one</span>.</p>
+    <div class="col3" style="margin-top:14px">
+      <div class="card"><h3>Flag from anywhere</h3><p>One tap on the exact KPI, chart, signal or robot — the entire end-to-end flow attached: order → task → robot → event.</p></div>
+      <div class="card"><h3>Curate, don’t gatekeep</h3><p>The vendor triages by exception; the system pre-deflects with its own knowledge base.</p></div>
+      <div class="card"><h3>Own it together</h3><p>Explicit ownership and hand-off across orgs, with a shared board both sides trust.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <div class="kicker">The mechanic</div>
+    <h2>Cheap to flag → curated to promote</h2>
+    <div class="flow">
+      <span class="step">⚑ Flag (1 tap)</span><span class="arr">→</span>
+      <span class="step">Auto-deflect <span class="mut">(known answer / limitation)</span></span><span class="arr">→</span>
+      <span class="step hot">Vendor swipe-triage</span><span class="arr">→</span>
+      <span class="step">Promote to ticket</span><span class="arr">→</span>
+      <span class="step">Own · resolve · verify</span>
+    </div>
+    <ul style="margin-top:22px">
+      <li>A <b>flag</b> is a vote/observation — it costs nothing. A <b>ticket</b> is a flag that survived triage.</li>
+      <li>Every flag arrives <b>pinned to the full cross-vendor flow</b> — order → fleet → robot → charging → event. No single vendor sees that end to end; <span class="accent">ROCO does</span> — which is why triage takes one second, not two days.</li>
+      <li>Spam dies at the <span class="accent">gate</span>, not at the source. Silence dies because flagging is one tap.</li>
+      <li class="dim"><b>“Won’t a flag button just create more noise?”</b> No — a flag isn’t work. Auto-deflection and one-second triage mean the vendor only ever sees what survived the gate.</li>
+    </ul>
+    <div class="links">
+      <a class="linkcard" href="mockups/01-flag-affordance.html" target="_blank"><span class="lt">⚑ Flag affordance</span><span class="ld">one-tap entry point</span></a>
+      <a class="linkcard" href="mockups/02-shared-site-board.html" target="_blank"><span class="lt">▦ Shared board</span><span class="ld">cross-org Kanban</span></a>
+      <a class="linkcard" href="mockups/03-vendor-swipe-triage.html" target="_blank"><span class="lt">↔ Swipe-triage</span><span class="ld">vendor goalkeeper</span></a>
+      <a class="linkcard" href="mockups/04-prefile-deflection.html" target="_blank"><span class="lt">? Deflection</span><span class="ld">self-resolve first</span></a>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <div class="kicker">Why this is a growth hook</div>
+    <h2>Multi-org cooperation makes ROCO <span class="accent">sticky</span></h2>
+    <p class="lead">Every automated warehouse already has 3+ organizations around it. Win the cooperation layer and you don’t sell seats — you become the room they all meet in.</p>
+    <div class="cols" style="margin-top:14px">
+      <div><ul>
+        <li><b>Land at ramp-up:</b> integrators bring their customers <em>into</em> ROCO instead of emailing them PDFs.</li>
+        <li><b>Expand by org:</b> every new actor on a site is a new seat, not a new sale.</li>
+        <li><b>Network effects:</b> the resolution knowledge base compounds across sites and customers.</li>
+        <li><b>No lock-in, by design:</b> the record is <span class="accent">vendor-independent</span> — swap the integrator and the shared history of how every problem was solved stays in ROCO.</li>
+      </ul></div>
+      <div class="card">
+        <span class="tag">From dashboard to infrastructure</span>
+        <p class="big">A reporting tool is replaceable. The <span class="accent">shared operating record</span> two companies built together is not.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9b · GTM lever -->
+  <section class="slide">
+    <div class="kicker">The go-to-market lever</div>
+    <h2>The customer holds the lever — <span class="accent">everyone else benefits</span></h2>
+    <p class="lead">The operator signs for the whole automation project — so the operator, <em>not</em> the integrator, can make <span class="hl">“we run on shared ROCO”</span> a condition of the contract. One clause guarantees neutral data interpretation, one shared KPI definition, and cross-vendor benchmarking for the life of the site.</p>
+    <div class="col3" style="margin-top:14px">
+      <div class="card"><span class="tag accent">End customer · the buyer</span><h3>Mandates it</h3><p>Neutral interpretation they don’t have to take on faith, one KPI definition every vendor is held to, benchmarking across sites &amp; brands, SLA teeth, and no lock-in.</p></div>
+      <div class="card"><span class="tag">Integrator</span><h3>Says yes anyway</h3><p>Auto-deflection kills noise tickets, triage-by-exception saves engineer hours, the neutral record <em>proves</em> they resolved it — and “we work transparently via ROCO” wins bids.</p></div>
+      <div class="card"><span class="tag">Robot vendor · OEM</span><h3>Wins by it</h3><p>Normalized field data across real deployments is product gold — and robots that genuinely perform win on a neutral scoreboard. Neutrality is ammunition, not a threat.</p></div>
+    </div>
+    <p class="lead" style="margin-top:20px">Sell the customer <b>once, at ramp-up</b> — and they pull the rest of the ecosystem in. <span class="mut">Distribution solved.</span></p>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <div class="kicker">Why now · unfair advantage</div>
+    <h2>The substrate already exists</h2>
+    <div class="statrow">
+      <div><div class="stat accent">2</div><div class="mut">orgs already share the Willebroek site (DistriLog + Toyota) — live today</div></div>
+      <div><div class="stat">~8k</div><div class="mut">machine-detected signals ROCO already surfaces per site, ready to be flagged</div></div>
+      <div><div class="stat amber">0→1</div><div class="mut">the cross-org collaboration layer is the one missing piece — not the plumbing</div></div>
+    </div>
+    <ul style="margin-top:18px">
+      <li>Multi-org model, shared sites, per-site permissions — <span class="accent">built.</span></li>
+      <li>Vendor-normalization across robot OEMs &amp; WMS into <em>one</em> neutral schema — <span class="accent">built.</span> <span class="mut">(roco-bridge)</span></li>
+      <li>Support tickets, resolutions, AI similarity search, asset timelines — <span class="accent">built.</span></li>
+      <li>Teams / Slack / email notification fan-out — <span class="accent">built.</span></li>
+      <li class="dim">What’s missing: cross-org visibility, the lightweight flag, and the triage funnel.</li>
+    </ul>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <div class="kicker">What good looks like</div>
+    <h2>From silos &amp; suspicion → <span class="accent">a shared scoreboard</span></h2>
+    <div class="col3">
+      <div class="card"><h3>Transparency</h3><p>Both orgs see the same board, the same status, the same “why we closed it.”</p></div>
+      <div class="card"><h3>Co-op, not blame</h3><p>A shared site-health score both sides raise together — gamified collaboration, not org-vs-org.</p></div>
+      <div class="card"><h3>Faster + calmer</h3><p>Lower MTTR, fewer duplicate tickets, and a customer who never feels alone on a bad day.</p></div>
+    </div>
+    <p class="lead" style="margin-top:20px">The scoreboard we move: <b>MTTR</b> days → hours · <b>noise tickets</b> down · <b>retention through ramp-up</b> up.</p>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <div class="kicker">The vision</div>
+    <p class="quote">Every robotic warehouse runs on a <span class="accent">shared ROCO</span> — where the people who run it, the people who built it, and the machines themselves work the same problems, together.</p>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <div class="kicker">This workshop</div>
+    <h2>What we’ll decide today</h2>
+    <ul>
+      <li>How transparent is a shared site — fully open, or vendor-curated public lane + private lane?</li>
+      <li>Who can promote a flag into a ticket — vendor-only, threshold, or either org?</li>
+      <li>The MVP slice: <span class="accent">flag-from-report → shared board → vendor swipe-triage → deflection.</span></li>
+      <li>How we frame the “fun”: a co-op site-health score the customer and vendor raise together.</li>
+    </ul>
+    <p class="lead" style="margin-top:18px"><b class="accent">The ask:</b> greenlight the MVP slice and pick <b>one ramp-up site</b> where the customer will <span class="accent">mandate ROCO as the shared ground</span>.</p>
+    <p class="lead" style="margin-top:16px">Companion docs:</p>
+    <div class="links">
+      <a class="linkcard" href="roco_multi_org_summary.md" target="_blank"><span class="lt">2-page summary</span><span class="ld">the brief, condensed</span><span class="lf">roco_multi_org_summary.md</span></a>
+      <a class="linkcard" href="roco_multi_org.md" target="_blank"><span class="lt">Full workshop brief</span><span class="ld">current state · gaps · features</span><span class="lf">roco_multi_org.md</span></a>
+    </div>
+    <p class="lead" style="margin-top:16px">Mockups:</p>
+    <div class="links">
+      <a class="linkcard" href="mockups/01-flag-affordance.html" target="_blank"><span class="lt">⚑ Flag affordance</span><span class="ld">one-tap entry point</span><span class="lf">01-flag-affordance.html</span></a>
+      <a class="linkcard" href="mockups/02-shared-site-board.html" target="_blank"><span class="lt">▦ Shared board</span><span class="ld">cross-org Kanban</span><span class="lf">02-shared-site-board.html</span></a>
+      <a class="linkcard" href="mockups/03-vendor-swipe-triage.html" target="_blank"><span class="lt">↔ Swipe-triage</span><span class="ld">vendor goalkeeper</span><span class="lf">03-vendor-swipe-triage.html</span></a>
+      <a class="linkcard" href="mockups/04-prefile-deflection.html" target="_blank"><span class="lt">? Deflection</span><span class="ld">self-resolve first</span><span class="lf">04-prefile-deflection.html</span></a>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>Shared ground for multi-org warehouses</span></div>
+  </section>
+
+  <!-- 14 — slogan close -->
+  <section class="slide">
+    <div class="kicker">Variation · One ↔ Any</div>
+    <h1><span class="accent">One</span> language.<br><span class="accent">Any</span> automation flow.</h1>
+    <p class="lead" style="font-size:clamp(20px,2.4vw,30px);color:var(--accent);font-weight:700;margin-bottom:22px;letter-spacing:-.01em">ROCO — now we're talking.</p>
+    <p class="lead">One ↔ any is the whole pitch in two words: one shared language, any flow you throw at it. The contrast does the work.</p>
+    <div class="footline"><span class="brand">ROCO</span><span>One language. Any automation flow.</span></div>
+  </section>
+
+</div>
+<div class="nav">← / → · <span id="counter">1 / 16</span></div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  // wrap each slide's content in a centered max-width column (keep .footline full-bleed)
+  slides.forEach(s=>{
+    const w=document.createElement('div'); w.className='wrap';
+    [...s.children].forEach(c=>{ if(!c.classList.contains('footline')) w.appendChild(c); });
+    s.insertBefore(w, s.firstChild);
+  });
+  let i=0;
+  const prog=document.getElementById('prog'), counter=document.getElementById('counter');
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    prog.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  function next(){show(i+1)} function prev(){show(i-1)}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' ','n','N'].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp','p','P'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(slides.length-1)}
+    else if(e.key==='f'){document.documentElement.requestFullscreen?.()}
+  });
+  window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1))-1;if(!isNaN(n)&&n!==i)show(n)});
+
+  // touch: swipe left/right, or tap (right half = next, left half = prev)
+  let tx=0,ty=0,tt=0;
+  const deck=document.getElementById('deck');
+  deck.addEventListener('touchstart',e=>{const t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;tt=e.timeStamp;},{passive:true});
+  deck.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,dt=e.timeStamp-tt;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); return; }
+    if(Math.abs(dx)<12&&Math.abs(dy)<12&&dt<400){
+      if(getSelection&&String(getSelection())) return;
+      (t.clientX>window.innerWidth*0.4)?next():prev();
+    }
+  },{passive:true});
+
+  const start=parseInt(location.hash.slice(1))-1;
+  show(isNaN(start)?0:start);
+</script>
+</body>
+</html>
