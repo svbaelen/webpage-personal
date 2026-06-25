@@ -66,7 +66,9 @@
         render(!q ? talks : talks.filter(t => haystack(t).includes(q)));
       }
 
-      fetch('manifest.json')
+      // cache-bust: GitHub Pages serves manifest.json with max-age=600,
+      // so without this the list can show stale data for ~10min post-deploy.
+      fetch('manifest.json?t=' + Date.now())
         .then(r => r.json())
         .then(data => { talks = data; apply(); })
         .catch(() => { listEl.innerHTML =
