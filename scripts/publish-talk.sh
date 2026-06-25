@@ -58,3 +58,44 @@ if [ "$CMD" = "publish" ]; then
   case "$FILE" in *.html) ;; *) die "input must be a .html file";; esac
   [ -n "$TITLE" ] || [ -n "$SLUG" ] || die "--title (or --slug) is required"
 fi
+
+ensure_repo() {
+  if [ ! -d "$REPO_DIR/.git" ]; then
+    git clone -q "$REMOTE" "$REPO_DIR" || die "clone failed: $REMOTE"
+  else
+    git -C "$REPO_DIR" pull -q --rebase || die "pull failed"
+  fi
+}
+
+manifest_upsert() {  # args: slug title date tags project type desc file
+  local m="$REPO_DIR/talks/manifest.json" tmp
+  tmp="$(mktemp)"
+  [ -f "$m" ] || echo '[]' > "$m"
+  # tags: comma list -> json array (empty string -> [])
+  jq \
+    --arg slug "$1" --arg title "$2" --arg date "$3" \
+    --arg tags "$4" --arg project "$5" --arg type "$6" \
+    --arg desc "$7" --arg file "$8" '
+    ($tags | if . == "" then [] else split(",") | map(gsub("^ +| +$";"")) end) as $t
+    | ([{slug:$slug,title:$title,date:$date,tags:$t,description:$desc,
+         project:$project,type:$type,file:$file}]
+       + map(select(.slug != $slug)))
+    | sort_by(.date) | reverse
+  ' "$m" > "$tmp" && mv "$tmp" "$m"
+}
+
+if [ "$CMD" = "publish" ]; then
+  ensure_repo
+  [ -n "$SLUG" ] || SLUG="$(slugify "$TITLE")"
+  [ -n "$SLUG" ] || die "could not derive slug from title"
+  [ -n "$DATE" ] || DATE="$(date +%F)"
+  [ -n "$TITLE" ] || TITLE="$SLUG"
+  mkdir -p "$REPO_DIR/talks/slides"
+  cp "$FILE" "$REPO_DIR/talks/slides/$SLUG.html"
+  manifest_upsert "$SLUG" "$TITLE" "$DATE" "$TAGS" "$PROJECT" "$TYPE" \
+    "$DESC" "slides/$SLUG.html"
+  git -C "$REPO_DIR" add talks
+  git -C "$REPO_DIR" commit -q -m "Publish talk: $SLUG"
+  git -C "$REPO_DIR" push -q
+  printf 'Published: https://svbaelen.me/talks/slides/%s.html\n' "$SLUG"
+fi
