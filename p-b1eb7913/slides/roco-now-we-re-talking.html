@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROCO — Slogan Options</title>
+<style>
+  :root{
+    --bg:#0f1620; --bg2:#141d2a; --ink:#eef2f7; --mut:#9fb0c3; --dim:#6b7d92;
+    --line:#26323f; --accent:#36c2a8; --accent2:#f0a23c; --warn:#e2683f;
+    --card:#16202d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);overflow:hidden}
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    align-items:center;padding:4.5vh 3.5vw;animation:fade .35s ease}
+  .slide.on{display:flex}
+  .wrap{width:100%;max-width:1180px;margin:0 auto}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:22px;font-weight:600}
+  h1{font-size:clamp(34px,5.6vw,68px);line-height:1.05;margin:0 0 18px;font-weight:800;letter-spacing:-.02em}
+  .mut{color:var(--mut)}
+  .accent{color:var(--accent)}
+  .amber{color:var(--accent2)}
+  .dim{color:var(--dim)}
+
+  /* big triad slogans */
+  .triad{font-size:clamp(30px,5vw,62px);font-weight:800;line-height:1.12;letter-spacing:-.02em}
+  .triad .pay{color:var(--accent)}
+  .sub{font-size:clamp(16px,1.7vw,21px);color:var(--mut);margin-top:26px;max-width:60ch;line-height:1.5}
+
+  /* option grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  .opt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;position:relative}
+  .opt .num{position:absolute;top:14px;right:18px;font-size:12px;color:var(--dim);font-weight:700}
+  .opt .line{font-size:clamp(19px,2.1vw,27px);font-weight:700;line-height:1.22;letter-spacing:-.01em}
+  .opt .why{font-size:14px;color:var(--mut);margin-top:12px;line-height:1.45}
+  .opt.fav{border-color:var(--accent)}
+  .opt.fav:before{content:"★ pick";position:absolute;top:14px;left:18px;font-size:11px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .opt.fav .line{padding-top:14px}
+
+  .tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--dim);border:1px solid var(--line);border-radius:99px;padding:3px 11px;margin-bottom:18px}
+  .zap{color:var(--accent2)}
+
+  .footline{position:absolute;left:6vw;right:6vw;bottom:3.2vh;display:flex;justify-content:space-between;
+    align-items:center;font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+  .brand{font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s;z-index:9}
+  .nav{position:fixed;bottom:14px;right:18px;font-size:12px;color:var(--dim);user-select:none}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="deck" id="deck">
+
+  <!-- 0 — cover -->
+  <section class="slide on">
+    <div class="wrap">
+      <div class="kicker">ROCO · Slogan Options</div>
+      <h1>The line that has<br>to do the work.</h1>
+      <p class="sub">
+        Interop + neutral ground, with a Zapier-flavored hook.
+        <span class="dim">← / → to move · groups: triad refits · Zapier-direct · punchy one-liners.</span>
+      </p>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>00 — overview</span></div>
+  </section>
+
+  <!-- triad refits -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">group a · keep the three-line cadence</span>
+      <div class="grid">
+        <div class="opt fav">
+          <div class="line">One warehouse.<br><span class="mut">Many vendors, many systems.</span><br><span class="accent">One language they all speak.</span></div>
+          <div class="why">Smallest change to what you have. "One language" <em>is</em> the interop promise — and a language is shared, neutral ground by nature.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Many vendors.<br>Many systems.<br><span class="accent">One floor they all share.</span></div>
+          <div class="why">Drops "warehouse" for the more vivid "floor." Neutral-ground angle, tighter.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Every vendor.<br>Every system.<br><span class="accent">One ground rule.</span></div>
+          <div class="why">"Ground rule" puns on shared ground + says there's finally a common standard.</div>
+        </div>
+        <div class="opt">
+          <div class="line">One floor.<br>Every fleet.<br><span class="accent">One source of truth.</span></div>
+          <div class="why">If the room cares more about data unity than integration plumbing.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>01 — triad refits</span></div>
+  </section>
+
+  <!-- 3 — zapier-direct -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag"><span class="zap">group b</span> · the Zapier hook, said out loud</span>
+      <div class="grid">
+        <div class="opt fav">
+          <div class="line"><span class="zap">Zapier</span> for the warehouse floor.</div>
+          <div class="why">Instantly legible to anyone who's wired up two SaaS tools. One sentence, whole category understood.</div>
+        </div>
+        <div class="opt">
+          <div class="line">If <span class="zap">Zapier</span> ran your robots,<br>it would be ROCO.</div>
+          <div class="why">Borrows the mental model without claiming to <em>be</em> Zapier. Good opener line for a talk.</div>
+        </div>
+        <div class="opt">
+          <div class="line">The integration layer<br>for warehouse automation.</div>
+          <div class="why">The plainspoken version of the Zapier pitch — no brand borrowed. Safe for skeptics.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Connect any robot,<br>any system. No rip-and-replace.</div>
+          <div class="why">The actual Zapier value prop: add, don't tear out. Speaks to ops buyers directly.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>02 — zapier-direct</span></div>
+  </section>
+
+  <!-- 4 — language analogy -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">group c · iterating the <span class="accent">"one language"</span> line</span>
+      <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="opt fav">
+          <div class="line">One warehouse.<br>One language.<br><span class="accent" style="font-size:.7em;font-weight:600">Every robot. Every vendor. Every flow.</span></div>
+          <div class="why">The headline + rule-of-three subtext. Subtext is where "language" quietly becomes orchestration.</div>
+        </div>
+        <div class="opt fav">
+          <div class="line">One warehouse,<br><span class="accent">finally fluent.</span></div>
+          <div class="why">Compresses to one line and implies it <em>wasn't</em> before. Tightest version.</div>
+        </div>
+        <div class="opt">
+          <div class="line">One warehouse. One language.<br><span class="accent">Zero translators.</span></div>
+          <div class="why">Rule-of-three punch — names the pain (translation overhead) and kills it.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Many dialects.<br><span class="accent">One language.</span></div>
+          <div class="why">Vendor sprawl → unity, in four words. "Dialect" = manageable difference, not chaos.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Swap the noun:<br><span class="accent">grammar · protocol · standard · common tongue</span></div>
+          <div class="why">Same rhythm, different nuance — grammar/protocol lean technical &amp; orchestration; standard is buyer-plain; tongue is warmer.</div>
+        </div>
+        <div class="opt">
+          <div class="line">One warehouse. One language —<br><span class="accent">now they talk.</span></div>
+          <div class="why">Verb form. More active, leans into the orchestration payoff: connection that <em>does</em> something.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>03 — one language</span></div>
+  </section>
+
+  <!-- 5 — orchestration (connect AND orchestrate) -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">group d · we don't just connect — we <span class="accent">orchestrate</span></span>
+      <div class="grid">
+        <div class="opt fav">
+          <div class="line">One flow.<br>Every robot.<br><span class="accent">Any vendor.</span></div>
+          <div class="why">Triad cadence, orchestration-first. "Flow" says we run the choreography, not just the wiring.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Arms, AMRs, conveyors —<br><span class="accent">one flow, one floor.</span></div>
+          <div class="why">Names the heterogeneous actors out loud, then unifies them. Concrete = credible.</div>
+        </div>
+        <div class="opt">
+          <div class="line"><span class="accent">Connect</span> any vendor.<br><span class="accent">Orchestrate</span> them as one.</div>
+          <div class="why">The two-beat pitch in two verbs — exactly the two things ROCO does.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Choreography for robots<br>that were never built<br>to dance together.</div>
+          <div class="why">Orchestration twin of the "shared ground" line — earns its payoff with the tension.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>04 — orchestration</span></div>
+  </section>
+
+  <!-- 6 — punchy one-liners -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">group e · punchy one-liners</span>
+      <div class="grid">
+        <div class="opt">
+          <div class="line">Many fleets. One floor. <span class="accent">Zero silos.</span></div>
+          <div class="why">Triad rhythm compressed to one line. "Zero silos" lands the neutral-ground win.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Make every vendor<br>play on the same field.</div>
+          <div class="why">Neutral ground as a sports field — fair, shared, no home advantage.</div>
+        </div>
+        <div class="opt fav">
+          <div class="line">One shared ground<br>for robots that were<br>never built to talk.</div>
+          <div class="why">Keeps your "shared ground," then earns it with the tension in the back half.</div>
+        </div>
+        <div class="opt">
+          <div class="line">Vendor-neutral.<br>Robot-fluent.</div>
+          <div class="why">Two coined adjectives = the whole positioning. Pairs well under a bigger headline.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>05 — punchy</span></div>
+  </section>
+
+  <!-- 7 — analogies -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">pick your analogy · the "X for Y" shortcut</span>
+      <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="opt fav">
+          <div class="line"><span class="accent">USB-C</span><br>for the warehouse</div>
+          <div class="why">One connector, any device. Most universally legible — zero technical baggage. <span class="dim">interop</span></div>
+        </div>
+        <div class="opt fav">
+          <div class="line">The <span class="accent">conductor</span><br>of the floor</div>
+          <div class="why">Many instruments, one score, in time. "Orchestrate" is in the word. <span class="dim">orchestration</span></div>
+        </div>
+        <div class="opt">
+          <div class="line"><span class="zap">Zapier</span><br>for robots</div>
+          <div class="why">Connect <em>and</em> run the flow across them — covers both halves. No rip-and-replace. <span class="dim">both</span></div>
+        </div>
+        <div class="opt">
+          <div class="line"><span class="accent">Air-traffic control</span><br>for the floor</div>
+          <div class="why">Many operators, one airspace, safe hand-offs. Vivid, neutral-ground built in. <span class="dim">orchestration</span></div>
+        </div>
+        <div class="opt">
+          <div class="line"><span class="accent">Stripe</span><br>for the warehouse</div>
+          <div class="why">Hides the integration pain entirely — you never touch the plumbing. <span class="dim">interop</span></div>
+        </div>
+        <div class="opt">
+          <div class="line"><span class="accent">Switzerland</span><br>for your fleet</div>
+          <div class="why">Vendor-neutral, everyone's welcome, takes no side. The pure neutral-ground laugh line. <span class="dim">neutral</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>06 — analogies</span></div>
+  </section>
+
+  <!-- taglines -->
+  <section class="slide">
+    <div class="wrap">
+      <span class="tag">group f · the witty tagline — <span class="accent">double meaning</span></span>
+      <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="opt fav">
+          <div class="line">ROCO —<br><span class="accent">now we're talking.</span></div>
+          <div class="why">The winner. Idiom (finally, something good) <em>and</em> literal (robots that talk, one language). Doubles as a talk transition.</div>
+        </div>
+        <div class="opt">
+          <div class="line">ROCO —<br><span class="accent">now you're in sync.</span></div>
+          <div class="why">Coordination + the music sense. Leans orchestration.</div>
+        </div>
+        <div class="opt">
+          <div class="line">ROCO —<br><span class="accent">get it together.</span></div>
+          <div class="why">Orchestration + "pull yourself together." Cheeky, confident.</div>
+        </div>
+        <div class="opt">
+          <div class="line">ROCO —<br><span class="accent">plays well with others.</span></div>
+          <div class="why">Vendor-neutral, said with a wink. Great on a "why ROCO" slide.</div>
+        </div>
+        <div class="opt">
+          <div class="line">ROCO —<br><span class="accent">speak warehouse.</span></div>
+          <div class="why">À la "speak human." Short, brandable, the language thread in two words.</div>
+        </div>
+        <div class="opt">
+          <div class="line">ROCO —<br><span class="accent">herding robots, handled.</span></div>
+          <div class="why">"Herding cats" joke for multi-vendor chaos. Memorable backup / spice line.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>07 — taglines</span></div>
+  </section>
+
+  <!-- variation: one / any -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="kicker">variation · one ↔ any</div>
+      <div class="triad" style="margin-bottom:18px">
+        <span class="accent">One</span> language.<br>
+        <span class="accent">Any</span> automation flow.
+      </div>
+      <p style="font-size:clamp(22px,2.8vw,38px);font-weight:800;color:var(--accent);letter-spacing:-.02em;margin:0 0 26px">ROCO — now we're talking.</p>
+      <p class="sub">
+        <span class="accent">One</span> ↔ <span class="accent">any</span> is the whole pitch in two words:
+        one shared language, any flow you throw at it. The contrast does the work.
+      </p>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>08 — variation</span></div>
+  </section>
+
+  <!-- variation: your / one / any -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="kicker">variation · your ↔ one ↔ any</div>
+      <div class="triad" style="margin-bottom:18px">
+        <span class="mut">Your</span> warehouse.<br>
+        <span class="accent">One</span> language.<br>
+        <span class="accent">Any</span> automation flow.
+      </div>
+      <p style="font-size:clamp(22px,2.8vw,38px);font-weight:800;color:var(--accent);letter-spacing:-.02em;margin:0 0 26px">ROCO — now we're talking.</p>
+      <p class="sub">
+        Opens on <span class="mut">your</span> (it's their floor, their problem), resolves to
+        <span class="accent">one</span> → <span class="accent">any</span>. Three-beat cadence, ownership built in.
+      </p>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>09 — variation</span></div>
+  </section>
+
+  <!-- variation: warehouse flow -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="kicker">variation · warehouse flow</div>
+      <div class="triad" style="margin-bottom:18px">
+        <span class="accent">One</span> language.<br>
+        <span class="accent">Any</span> warehouse flow.
+      </div>
+      <p style="font-size:clamp(22px,2.8vw,38px);font-weight:800;color:var(--accent);letter-spacing:-.02em;margin:0 0 26px">ROCO — now we're talking.</p>
+      <p class="sub">
+        "Warehouse flow" grounds it in the domain — less generic than "automation,"
+        and it quietly says <span class="accent">end-to-end</span>, not just robot moves.
+      </p>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>10 — variation</span></div>
+  </section>
+
+  <!-- the recommendation -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="kicker">if you only pick one</div>
+      <div class="triad" style="margin-bottom:18px">
+        One language.<br>
+        For all your automation flows.
+      </div>
+      <p style="font-size:clamp(22px,2.8vw,38px);font-weight:800;color:var(--accent);letter-spacing:-.02em;margin:0 0 26px">ROCO — now we're talking.</p>
+      <p class="sub">
+        Headline informs <span class="dim">(interop + neutral ground, orchestration in line 3)</span>;
+        the tagline lands the smile <em>and</em> doubles as a transition line in the talk —
+        “…what if every vendor spoke one language? <span class="accent">Now we're talking.</span>”
+      </p>
+    </div>
+    <div class="footline"><span class="brand">ROCO</span><span>11 — pick</span></div>
+  </section>
+
+</div>
+<div class="nav">← / → · <span id="counter">1 / 12</span></div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const prog=document.getElementById('prog'), counter=document.getElementById('counter');
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+    prog.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  function next(){show(i+1)} function prev(){show(i-1)}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' ','n','N'].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','PageUp','p','P'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(slides.length-1)}
+    else if(e.key==='f'){document.documentElement.requestFullscreen?.()}
+  });
+  window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1))-1;if(!isNaN(n)&&n!==i)show(n)});
+  const start=parseInt(location.hash.slice(1))-1;
+  show(isNaN(start)?0:start);
+</script>
+</body>
+</html>
