@@ -53,6 +53,17 @@
   .brand{font-weight:800;letter-spacing:-.02em;color:var(--ink)}
   .prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s;z-index:9}
   .nav{position:fixed;bottom:14px;right:18px;font-size:12px;color:var(--dim);user-select:none}
+
+  /* mobile: stack grids, let slides scroll, declutter the footer */
+  @media (max-width:760px){
+    .slide{padding:5vh 6vw 9vh;justify-content:flex-start;overflow-y:auto}
+    .grid{grid-template-columns:1fr !important;gap:14px}
+    .triad{font-size:clamp(30px,9vw,46px)}
+    h1{font-size:clamp(32px,9vw,52px)}
+    .opt .line{font-size:clamp(18px,5.4vw,24px)}
+    .footline{left:5vw;right:5vw;bottom:0;background:var(--bg);padding:9px 0;font-size:11px}
+    .nav{display:none}
+  }
 </style>
 </head>
 <body>
@@ -369,6 +380,20 @@
     else if(e.key==='f'){document.documentElement.requestFullscreen?.()}
   });
   window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1))-1;if(!isNaN(n)&&n!==i)show(n)});
+
+  // touch: swipe left/right, or tap (right half = next, left half = prev)
+  let tx=0,ty=0,tt=0;
+  const deck=document.getElementById('deck');
+  deck.addEventListener('touchstart',e=>{const t=e.changedTouches[0];tx=t.clientX;ty=t.clientY;tt=e.timeStamp;},{passive:true});
+  deck.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty,dt=e.timeStamp-tt;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); return; }   // horizontal swipe
+    if(Math.abs(dx)<12&&Math.abs(dy)<12&&dt<400){                                    // tap
+      if(getSelection&&String(getSelection())) return;                              // don't hijack text selection
+      (t.clientX>window.innerWidth*0.4)?next():prev();
+    }
+  },{passive:true});
+
   const start=parseInt(location.hash.slice(1))-1;
   show(isNaN(start)?0:start);
 </script>
