@@ -71,5 +71,13 @@ check "re-publish keeps single entry" '[ "$(jq length "$M")" = "1" ]'
 check "re-publish updates description" \
   '[ "$(jq -r ".[0].description" "$M")" = "updated" ]'
 
+# --- list + remove --------------------------------------------------------
+check "list shows the slug" \
+  'bash "$SCRIPT" --list | grep -q "hello-world"'
+bash "$SCRIPT" --remove hello-world >/dev/null
+check "remove drops manifest entry" '[ "$(jq length "$M")" = "0" ]'
+check "remove deletes slide file" \
+  '[ ! -f "$TALKS_REPO_DIR/talks/slides/hello-world.html" ]'
+
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

@@ -67,6 +67,13 @@ ensure_repo() {
   fi
 }
 
+git_push_retry() {
+  if ! git -C "$REPO_DIR" push -q 2>/dev/null; then
+    git -C "$REPO_DIR" pull -q --rebase || die "push failed; pull --rebase failed"
+    git -C "$REPO_DIR" push -q || die "push failed after rebase"
+  fi
+}
+
 manifest_upsert() {  # args: slug title date tags project type desc file
   local m="$REPO_DIR/talks/manifest.json" tmp
   tmp="$(mktemp)"
@@ -96,6 +103,25 @@ if [ "$CMD" = "publish" ]; then
     "$DESC" "slides/$SLUG.html"
   git -C "$REPO_DIR" add talks
   git -C "$REPO_DIR" commit -q -m "Publish talk: $SLUG"
-  git -C "$REPO_DIR" push -q
+  git_push_retry
   printf 'Published: https://svbaelen.me/talks/slides/%s.html\n' "$SLUG"
+fi
+
+if [ "$CMD" = "list" ]; then
+  ensure_repo
+  m="$REPO_DIR/talks/manifest.json"
+  [ -f "$m" ] || { echo "(no talks yet)"; exit 0; }
+  jq -r '.[] | "\(.slug) | \(.date) | \(.title)"' "$m"
+fi
+
+if [ "$CMD" = "remove" ]; then
+  [ -n "$SLUG" ] || die "--remove requires a slug"
+  ensure_repo
+  m="$REPO_DIR/talks/manifest.json"; tmp="$(mktemp)"
+  jq --arg s "$SLUG" 'map(select(.slug != $s))' "$m" > "$tmp" && mv "$tmp" "$m"
+  rm -f "$REPO_DIR/talks/slides/$SLUG.html"
+  git -C "$REPO_DIR" add talks
+  git -C "$REPO_DIR" commit -q -m "Remove talk: $SLUG"
+  git_push_retry
+  printf 'Removed: %s\n' "$SLUG"
 fi
