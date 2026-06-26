@@ -1,5 +1,15 @@
 [
   {
+    "slug": "roco-now-we-re-talking",
+    "title": "ROCO — Now we're talking",
+    "date": "2026-06-26",
+    "tags": [],
+    "description": "",
+    "project": "",
+    "type": "",
+    "file": "slides/roco-now-we-re-talking.html"
+  },
+  {
     "slug": "roco-shared-ground-for-multi-org-warehouses",
     "title": "ROCO — Shared Ground for Multi-Org Warehouses",
     "date": "2026-06-25",
@@ -8,15 +18,5 @@
     "project": "",
     "type": "",
     "file": "slides/roco-shared-ground-for-multi-org-warehouses.html"
-  },
-  {
-    "slug": "roco-now-we-re-talking",
-    "title": "ROCO — Now we're talking",
-    "date": "2026-06-25",
-    "tags": [],
-    "description": "",
-    "project": "",
-    "type": "",
-    "file": "slides/roco-now-we-re-talking.html"
   }
 ]
