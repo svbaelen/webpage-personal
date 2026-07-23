@@ -81,6 +81,21 @@
     border-radius:12px;padding:.5rem .5rem .15rem;position:relative;}
   #map{width:100%;height:clamp(380px,62vh,660px);border-radius:9px;overflow:hidden;
     box-shadow:0 1px 3px rgba(0,0,0,.14);}
+  /* 'waar zit ik'-strip onder de kaart — loopt mee met de simulatie */
+  .maploc{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;
+    padding:.55rem .35rem .25rem;line-height:1.35;}
+  .maploc .mlph{font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+    color:#fff;background:var(--r-heen);padding:.16rem .55rem;border-radius:999px;
+    white-space:nowrap;}
+  .maploc .mlseg{font-size:.9rem;color:var(--ink);font-weight:500;
+    flex:1 1 12rem;min-width:0;}
+  .maploc .mlkm{font-family:var(--font-mono);font-size:.82rem;color:var(--ink-soft);
+    white-space:nowrap;margin-left:auto;}
+  .legnote{font-size:.76rem;color:var(--ink-faint);line-height:1.4;
+    margin:.35rem 0 .1rem 2rem;}
+  .legnote b{color:var(--ink-soft);font-weight:600;}
+  .tnote{display:block;font-family:var(--font-mono);font-size:.72rem;
+    color:var(--ink-faint);margin-top:.18rem;font-weight:400;}
   .maplibregl-map{font-family:var(--font-sans);}
   .rider{width:16px;height:16px;border-radius:50%;background:var(--water);
     border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.45);}
@@ -244,6 +259,10 @@
     .stats{grid-template-columns:repeat(2,1fr);}
     #map{height:clamp(320px,52vh,520px);}
     .cols{grid-template-columns:1fr;}
+    /* simulatie-bediening vlak onder de kaart op mobiel, zodat je de rit ziet lopen */
+    aside.mapside .sim{order:-1;}
+    /* 'waar zit ik' netjes: pill + km op regel 1, segmenttekst op regel 2 */
+    .maploc .mlseg{flex-basis:100%;order:3;}
   }
   @media (prefers-reduced-motion:reduce){
     .fill,.readout .phase{transition:none;}
@@ -286,18 +305,26 @@
   <section class="mapwrap">
     <figure class="map">
       <div id="map"></div>
+      <div class="maploc" aria-live="polite">
+        <span class="mlph" id="mlph">Start</span>
+        <span class="mlseg" id="mlseg">Aanlooplus · Miramar → rotonde</span>
+        <span class="mlkm"><span id="mlkm">0,0</span> km · <span id="mltm">0:00</span></span>
+      </div>
     </figure>
 
     <aside class="mapside">
       <div>
         <div class="sectlabel">Opbouw · uit GPX</div>
         <div class="legend">
+          <div class="leg"><span class="sw" style="border-top-color:var(--warn)"></span>
+            <span class="nm"><b>Aanlooplus</b> · naar de rotonde</span><span class="km">2,7 km</span></div>
           <div class="leg"><span class="sw" style="border-top-color:var(--r-heen)"></span>
-            <span class="nm">Miramar → brug Sas 4</span><span class="km">7,04 km</span></div>
+            <span class="nm">Heen &amp; terug · Miramar ↔ brug Sas 4</span><span class="km">4,3 km ×2</span></div>
           <div class="leg"><span class="sw" style="border-top-color:var(--r-ronde)"></span>
-            <span class="nm"><b>Ronde ×3</b> · brug Sas 4 → Olmen</span><span class="km">26,14 km</span></div>
-          <div class="leg"><span class="sw" style="border-top-color:var(--r-terug)"></span>
-            <span class="nm">brug Sas 4 → Miramar</span><span class="km">4,32 km</span></div>
+            <span class="nm"><b>Ronde ×3</b> · brug Sas 4 → Olmen → terug</span><span class="km">26,14 km</span></div>
+          <div class="legnote">De <b>aanlooplus</b> (extra lus naar de rotonde en
+            terug) brengt de rit op 90 km. Heen en terug volgen daarna dezelfde
+            kanaaldijk — één richting mee, één tegen de wind.</div>
         </div>
       </div>
 
@@ -306,6 +333,9 @@
         <ol class="poi">
           <li><span class="dot" style="background:var(--ink)"></span>
             <span><b>Miramar</b> — start &amp; finish <span class="sub">51.2223, 5.1189</span></span></li>
+          <li><span class="dot" style="background:var(--warn)"></span>
+            <span><b>Rotonde</b> — keerpunt aanlooplus (Deel 1)
+              <span class="sub">+2,7 km · terug naar start, dan brug Sas 4</span></span></li>
           <li><span class="dot" style="background:var(--r-ronde)"></span>
             <span><b>brug Sas 4</b> — rondepunt · <b>3 rondes</b>
               <span class="sub">Kruispunt van vier kanalen</span></span></li>
@@ -363,7 +393,9 @@
       </tr></thead>
       <tbody>
         <tr><td><span class="tag" style="background:var(--r-heen)"></span>Start</td>
-          <td>Miramar → brug Sas 4</td><td class="n">7,04</td><td class="n">19</td>
+          <td>Miramar → brug Sas 4
+            <span class="tnote">incl. aanlooplus naar rotonde &amp; terug · +2,7 km</span></td>
+          <td class="n">7,04</td><td class="n">19</td>
           <td class="n">0:14</td><td class="n">0:14</td></tr>
         <tr><td><span class="tag" style="background:var(--r-ronde)"></span>Ronde 1</td>
           <td>brug Sas 4 ↔ Olmen</td><td class="n">26,14</td><td class="n">48</td>
@@ -382,7 +414,7 @@
       </tbody>
     </table>
 
-    <h2><span class="idx">02</span>Roadbook — de echte kaart</h2>
+    <h2><span class="idx">02</span>Roadbook — deel per deel</h2>
     <p class="h2sub">Elk deel met <span class="ab a">A</span> start en
       <span class="ab b">B</span> bestemming, zoals in Komoot. Het rondepunt is
       de <b>brug Sas 4</b> (Kruispunt van vier kanalen, bij de uitkijktorens &amp;
@@ -446,6 +478,8 @@ const RT = {"heen": [[51.222297, 5.11893], [51.222826, 5.12185], [51.223671, 5.1
 // ---- live map (MapLibre GL + Protomaps PMTiles, keyless) ----
 const miramar=RT.heen[0];
 const sas4=RT.heen[RT.heen.length-1];
+const rotonde=[51.225585,5.137445];   // keerpunt aanlooplus vooraan Deel 1
+const aanloop=RT.heen.slice(0,21);    // extra lus: Miramar → rotonde → terug op de corridor
 let south=RT.ronde[0];
 for(const p of RT.ronde) if(p[0]<south[0]) south=p;
 
@@ -476,9 +510,11 @@ function baseStyle(){
 let map=null, rider=null, follow=false;
 
 function addRoute(){
-  const defs=[['ronde','--r-ronde',5],['heen','--r-heen',5],['terug','--r-terug',4]];
-  for(const [k] of defs) if(!map.getSource('rt-'+k))
-    map.addSource('rt-'+k,{type:'geojson',data:lineFeat(RT[k])});
+  // gedeelde corridor (heen=terug, één weg) amber · ronde teal · aanlooplus terracotta bovenop
+  const defs=[['corridor','--r-heen',5,RT.terug],['ronde','--r-ronde',5,RT.ronde],
+              ['aanloop','--warn',4,aanloop]];
+  for(const [k,,,geom] of defs) if(!map.getSource('rt-'+k))
+    map.addSource('rt-'+k,{type:'geojson',data:lineFeat(geom)});
   for(const [k,,w] of defs) if(!map.getLayer('cas-'+k))
     map.addLayer({id:'cas-'+k,type:'line',source:'rt-'+k,
       layout:{'line-cap':'round','line-join':'round'},
@@ -489,6 +525,7 @@ function addRoute(){
       paint:{'line-color':cssv(v),'line-width':w}});
   if(!map.getSource('poi')) map.addSource('poi',{type:'geojson',data:{type:'FeatureCollection',features:[
     {type:'Feature',properties:{t:'Start / finish\nMiramar',c:cssv('--ink')},geometry:{type:'Point',coordinates:ll(miramar)}},
+    {type:'Feature',properties:{t:'Rotonde\nkeerpunt aanlooplus (Deel 1)',c:cssv('--warn')},geometry:{type:'Point',coordinates:ll(rotonde)}},
     {type:'Feature',properties:{t:'Rondepunt · 3×\nbrug Sas 4',c:cssv('--r-ronde')},geometry:{type:'Point',coordinates:ll(sas4)}},
     {type:'Feature',properties:{t:'Keerpunt ronde\nBrug Olmen Gervoort (Pakawi)',c:cssv('--r-heen')},geometry:{type:'Point',coordinates:ll(south)}},
     {type:'Feature',properties:{t:'Bevoorrading',c:'#2E8B57'},geometry:{type:'Point',coordinates:[5.16405,51.2330]}},
@@ -530,16 +567,34 @@ function hav(a,b){
   return 2*R*Math.asin(Math.sqrt(h));
 }
 const flat=[]; // {la,lo,d(cum),name,col}
+const spans=[]; // fase-grenzen in meters, voor de 'waar zit ik'-strip
 let cum=0, prev=null;
 for(const ph of seq){
+  const start=cum;
   for(let i=0;i<ph.pts.length;i++){
     const p=ph.pts[i];
     if(prev) cum+=hav(prev,p);
     flat.push({p, d:cum, name:ph.name, col:ph.col});
     prev=p;
   }
+  spans.push({name:ph.name, col:ph.col, start, end:cum});
 }
 const TOTAL=cum;                 // metres
+
+// fijnmazig 'waar zit ik'-label o.b.v. de lokale afstand binnen een fase
+function whereLabel(name, local, len){
+  const f = len>0 ? local/len : 0;
+  if(name==='Start'){                    // heen (7,04 km) opent met de aanlooplus
+    if(local < 1400) return 'Aanlooplus · Miramar → rotonde';
+    if(local < 2750) return 'Rotonde → terug voorbij de start';
+    return 'Langs de Sas 4-sluizen → rondepunt';
+  }
+  if(name.indexOf('Ronde')===0)
+    return f < .5 ? 'Kanaaldijk zuidwaarts → keerpunt Olmen'
+                  : 'Terug noordwaarts → brug Sas 4';
+  if(name==='Finish') return 'Brug Sas 4 → Miramar';
+  return '';
+}
 const KMH=30, TOTAL_KM=90;   // toon 90 km @ 30 km/u → finish ~3:00
 
 function fmt(min){const m=Math.floor(min), h=Math.floor(m/60);
@@ -548,6 +603,8 @@ function comma(x){return x.toFixed(1).replace('.',',');}
 
 const phEl=document.getElementById('ph'), kmEl=document.getElementById('km'),
       tmEl=document.getElementById('tm'), scrub=document.getElementById('scrub');
+const mlphEl=document.getElementById('mlph'), mlsegEl=document.getElementById('mlseg'),
+      mlkmEl=document.getElementById('mlkm'), mltmEl=document.getElementById('mltm');
 
 function at(dist){ // returns interpolated point + segment meta
   let lo=0,hi=flat.length-1;
@@ -559,10 +616,18 @@ function at(dist){ // returns interpolated point + segment meta
   return {p:[a.p[0]+(b.p[0]-a.p[0])*f, a.p[1]+(b.p[1]-a.p[1])*f], name:b.name, col:b.col};
 }
 function render(frac){
-  const cur=at(frac*TOTAL);
+  const distM=frac*TOTAL;
+  const cur=at(distM);
   const km=frac*TOTAL_KM, min=km/KMH*60;
   kmEl.textContent=comma(km); tmEl.textContent=fmt(min);
   phEl.textContent=cur.name; phEl.style.background=cur.col;
+  // 'waar zit ik'-strip onder de kaart
+  let span=spans[spans.length-1];
+  for(const s of spans){ if(distM<=s.end){ span=s; break; } }
+  if(mlphEl){ mlphEl.textContent=cur.name; mlphEl.style.background=cur.col; }
+  if(mlsegEl) mlsegEl.textContent=whereLabel(span.name, distM-span.start, span.end-span.start);
+  if(mlkmEl) mlkmEl.textContent=comma(km);
+  if(mltmEl) mltmEl.textContent=fmt(min);
   const pct=(frac*100).toFixed(1);
   scrub.style.background='linear-gradient(90deg,var(--water) '+pct+'%,var(--panel) '+pct+'%)';
   if(rider){const c=[cur.p[1],cur.p[0]]; rider.setLngLat(c);
@@ -572,11 +637,15 @@ function render(frac){
 // ---- playback ----
 let frac=0, playing=false, speed=1, raf=null, last=null;
 const BASE=32000; // ms for whole route at 1x
+// speel de aanlooplus (eerste ~3 km) trager af zodat de extra lus zichtbaar is;
+// de klok blijft correct — die hangt aan de afstand, niet aan het speeltempo
+const AANLOOP_M=flat[aanloop.length-1].d, AANLOOP_SLOW=0.5;
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function tick(ts){
   if(last==null)last=ts;
   const dt=ts-last; last=ts;
-  frac += dt/(BASE/speed);
+  const warp = frac*TOTAL < AANLOOP_M ? AANLOOP_SLOW : 1;
+  frac += dt/(BASE/speed)*warp;
   if(frac>=1){frac=1;stop();}
   scrub.value=Math.round(frac*1000);
   render(frac);
