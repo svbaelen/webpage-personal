@@ -231,6 +231,8 @@
   .ab.a{background:var(--r-terug);} .ab.b{background:var(--warn);}
   .arr{color:var(--ink-faint);margin:0 .1rem;}
   .capkm{font-family:var(--font-mono);color:var(--ink-soft);white-space:nowrap;}
+  .capnote{flex-basis:100%;font-size:.78rem;color:var(--ink-faint);line-height:1.35;
+    border-top:1px solid var(--line);padding-top:.4rem;margin-top:.15rem;}
   @media (max-width:640px){ .shotrow{grid-template-columns:1fr;} }
 
   footer{margin-top:2.4rem;padding-top:1rem;border-top:1px solid var(--line);
@@ -310,6 +312,9 @@
           <li><span class="dot" style="background:var(--r-heen)"></span>
             <span><b>Brug Olmen Gervoort (Pakawi)</b> — zuidelijk keerpunt
               <span class="sub">verste punt · Kanaal Dessel–Kwaadmechelen</span></span></li>
+          <li><span class="dot" style="background:#2E8B57"></span>
+            <span><b>Bevoorrading</b> — aan het noordelijke keerpunt
+              <span class="sub">bij de brug Sas 4</span></span></li>
         </ol>
       </div>
 
@@ -390,6 +395,8 @@
             <span class="ab a">A</span> Miramar <span class="arr">→</span>
             <span class="ab b">B</span> brug Sas 4</span>
           <span class="capkm">7,04 km · langs Sas 4-sluizen</span>
+          <span class="capnote">Bevat vooraan een extra lus tot de rotonde en
+            terug naar de start (thuisbasis) — zo komt de rit op 90 km.</span>
         </figcaption>
       </figure>
       <figure class="shot">
@@ -415,6 +422,8 @@
           <figcaption>
             <span class="cap"><b>Keerpunt</b> — het noordelijke
               ommekeer-lusje aan de brug Sas 4</span>
+            <span class="capnote">De <b>bevoorrading</b> ligt hier, aan het
+              keerpunt (op de kaart met een groene stip).</span>
           </figcaption>
         </figure>
       </div>
@@ -484,6 +493,7 @@ function addRoute(){
     {type:'Feature',properties:{t:'Start / finish\nMiramar',c:cssv('--ink')},geometry:{type:'Point',coordinates:ll(miramar)}},
     {type:'Feature',properties:{t:'Rondepunt · 3×\nbrug Sas 4',c:cssv('--r-ronde')},geometry:{type:'Point',coordinates:ll(sas4)}},
     {type:'Feature',properties:{t:'Keerpunt ronde\nBrug Olmen Gervoort (Pakawi)',c:cssv('--r-heen')},geometry:{type:'Point',coordinates:ll(south)}},
+    {type:'Feature',properties:{t:'Bevoorrading',c:'#2E8B57'},geometry:{type:'Point',coordinates:[5.1636,51.2331]}},
   ]}});
   if(!map.getLayer('poi-c')) map.addLayer({id:'poi-c',type:'circle',source:'poi',
     paint:{'circle-radius':6,'circle-color':['get','c'],'circle-stroke-width':2.5,'circle-stroke-color':'#fff'}});
