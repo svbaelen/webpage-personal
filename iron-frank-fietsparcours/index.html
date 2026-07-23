@@ -109,6 +109,13 @@
     color:var(--ink-soft);cursor:pointer;user-select:none;margin-left:.3rem;}
   .attrib{font-family:var(--font-mono);font-size:.62rem;color:var(--ink-faint);
     text-align:right;padding:.2rem .3rem .1rem;line-height:1.2;}
+  ul.dl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem;}
+  ul.dl a{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;
+    text-decoration:none;color:var(--water);font-size:.9rem;padding:.42rem .6rem;
+    border:1px solid var(--line);border-radius:7px;background:var(--surface);}
+  ul.dl a:hover{border-color:var(--water);}
+  ul.dl a b{font-weight:600;}
+  ul.dl a span{font-family:var(--font-mono);font-size:.8rem;color:var(--ink-soft);}
 
   aside.mapside{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     gap:1.3rem 1.9rem;align-items:start;}
@@ -246,33 +253,25 @@
     <div class="eyebrow">Roadbook · IRON FRANK 70.3 · 2 aug 2026</div>
     <h1>Fiets&shy;parcours</h1>
     <p class="lede">Drie identieke rondes over vlak Kempens kanaalgebied —
-      start &amp; finish <b>Miramar</b> (Mol). Geen klim om achter te schuilen:
-      hier moet je vermogen <em>zelf</em> constant blijven.</p>
+      start &amp; finish <b>Miramar</b> (Mol). Het volledige 90 km-parcours,
+      samengesteld uit drie GPX-delen.</p>
 
     <div class="stats">
-      <div class="stat"><div class="n">89,76<small>km</small></div>
+      <div class="stat"><div class="n">90<small>km</small></div>
         <div class="l">Totaal · 3 rondes</div></div>
       <div class="stat"><div class="n">171<small>hm</small></div>
         <div class="l">Quasi vlak</div></div>
-      <div class="stat"><div class="n">~2:55</div>
-        <div class="l">@ 31 km/u · racedoel</div></div>
+      <div class="stat"><div class="n">~3:00</div>
+        <div class="l">Rittijd @ 30 km/u</div></div>
       <div class="stat"><div class="n">26,14<small>km</small></div>
-        <div class="l">Per ronde · ~51 min</div></div>
+        <div class="l">Per ronde · ~52 min</div></div>
     </div>
   </header>
 
   <section class="mapwrap">
     <figure class="map">
       <div id="map"></div>
-      <div class="maptools">
-        <span style="font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;
-          text-transform:uppercase;color:var(--ink-faint)">Stijl</span>
-        <button class="chip on" data-style="kleur">Kleur</button>
-        <button class="chip" data-style="grijs">Grijs</button>
-        <button class="chip" data-style="donker">Donker</button>
-        <label class="follow"><input type="checkbox" id="follow"> camera volgt</label>
-      </div>
-      <div class="attrib">© OpenStreetMap · Protomaps · lokale vector-tiles (pmtiles)</div>
+      <div class="attrib">© OpenStreetMap · Protomaps · vector-tiles (pmtiles)</div>
     </figure>
 
     <aside class="mapside">
@@ -295,7 +294,7 @@
             <span><b>Miramar</b> — start &amp; finish <span class="sub">51.2223, 5.1189</span></span></li>
           <li><span class="dot" style="background:var(--r-ronde)"></span>
             <span><b>brug Sas 4</b> — rondepunt · <b>4× gepasseerd</b>
-              <span class="sub">Kruispunt van vier kanalen · bidonstop</span></span></li>
+              <span class="sub">Kruispunt van vier kanalen</span></span></li>
           <li><span class="dot" style="background:var(--r-heen)"></span>
             <span><b>Brug Olmen / Pakawi</b> — zuidelijk keerpunt
               <span class="sub">verste punt · Kanaal Dessel–Kwaadmechelen</span></span></li>
@@ -305,7 +304,7 @@
       <div class="sim">
         <div class="readout">
           <div class="phase" id="ph">Heen</div>
-          <div class="rd"><span id="km">0,0</span> <span class="sep">/ 89,8 km ·</span> <span id="tm">0:00</span></div>
+          <div class="rd"><span id="km">0,0</span> <span class="sep">/ 90 km ·</span> <span id="tm">0:00</span></div>
         </div>
         <div class="track"><div class="fill" id="fill"></div></div>
         <div class="ctrls">
@@ -317,18 +316,32 @@
             <button data-s="4">4×</button>
           </div>
         </div>
-        <p class="simhint">De klok loopt op <b>31 km/u</b> — je racedoel.
-          De marker rijdt heen, 3 rondes en terug; ~2:55 op de finish.</p>
+        <p class="simhint">De klok loopt op <b>30 km/u</b>. De marker rijdt het
+          volledige parcours — heen, 3 rondes en terug; ~3:00 op de finish.</p>
+      </div>
+
+      <div>
+        <div class="sectlabel">GPX downloaden</div>
+        <ul class="dl">
+          <li><a href="./gpx/iron-frank-fietsparcours-volledig.gpx" download>
+            <b>Volledige route</b><span>90 km · 3 rondes</span></a></li>
+          <li><a href="./gpx/heen-miramar-sas4.gpx" download>
+            Heen<span>7,04 km</span></a></li>
+          <li><a href="./gpx/ronde-sas4-olmen-terug.gpx" download>
+            Ronde<span>26,14 km</span></a></li>
+          <li><a href="./gpx/terug-sas4-miramar.gpx" download>
+            Terug<span>4,32 km</span></a></li>
+        </ul>
       </div>
     </aside>
   </section>
 
   <!-- ============ PAGE 2 ============ -->
   <div class="page2">
-    <h2><span class="idx">01</span>Racesimulatie</h2>
-    <p class="h2sub">Op racetempo (NP 188–195 W ≈ 30–31 km/u). Drie identieke
-      lussen van ~51 min maken dit een strak ijkpunt: <b>ronde 3 mag qua NP
-      niet onder ronde 1 zakken</b> — dat is je negatieve-split-test.</p>
+    <h2><span class="idx">01</span>Afstanden &amp; tijden</h2>
+    <p class="h2sub">Afstand en hoogtemeters per deel; de tijd is berekend op
+      <b>30 km/u</b>. Het parcours is één heenweg, drie identieke rondes en één
+      terugweg.</p>
     <table>
       <thead><tr>
         <th>Fase</th><th>Traject</th><th class="n">km</th><th class="n">hm</th>
@@ -340,18 +353,18 @@
           <td class="n">0:14</td><td class="n">0:14</td></tr>
         <tr><td><span class="tag" style="background:var(--r-ronde)"></span>Ronde 1</td>
           <td>brug Sas 4 → Olmen → terug</td><td class="n">26,14</td><td class="n">48</td>
-          <td class="n">0:51</td><td class="n">1:04</td></tr>
+          <td class="n">0:52</td><td class="n">1:06</td></tr>
         <tr><td><span class="tag" style="background:var(--r-ronde)"></span>Ronde 2</td>
           <td>idem</td><td class="n">26,14</td><td class="n">48</td>
-          <td class="n">0:51</td><td class="n">1:55</td></tr>
+          <td class="n">0:52</td><td class="n">1:59</td></tr>
         <tr><td><span class="tag" style="background:var(--r-ronde)"></span>Ronde 3</td>
           <td>idem</td><td class="n">26,14</td><td class="n">48</td>
-          <td class="n">0:51</td><td class="n">2:46</td></tr>
+          <td class="n">0:52</td><td class="n">2:51</td></tr>
         <tr><td><span class="tag" style="background:var(--r-terug)"></span>Terug</td>
           <td>brug Sas 4 → Miramar</td><td class="n">4,32</td><td class="n">8</td>
-          <td class="n">0:08</td><td class="n">2:54</td></tr>
-        <tr class="total"><td>Totaal</td><td>90 km-race ≈ 89,76</td>
-          <td class="n">89,76</td><td class="n">171</td><td class="n"></td><td class="n">~2:54</td></tr>
+          <td class="n">0:09</td><td class="n">3:00</td></tr>
+        <tr class="total"><td>Totaal</td><td>Volledige route</td>
+          <td class="n">90</td><td class="n">171</td><td class="n"></td><td class="n">~3:00</td></tr>
       </tbody>
     </table>
 
@@ -398,49 +411,14 @@
       </div>
     </div>
 
-    <h2><span class="idx">03</span>Zo rijd je 'm</h2>
-    <div class="cols">
-      <div class="card">
-        <h3><span class="k">PACING</span>Vermogen &amp; wind</h3>
-        <ul>
-          <li><b>Vlak = geen schuilplaats.</b> 171 hm over 90 km → je NP moet
-            uit jóuw benen komen, niet uit het profiel. Doel <b>NP 188–195 W,
-            cap 250 W</b>.</li>
-          <li><b>Wind is de test.</b> De kanaaldijken zijn onbeschut. Rijd bewust
-            je watt in de tegenwindstukken — daar ontploft een eerste tri.</li>
-          <li><b>Negatieve split.</b> Vergelijk NP per ronde op de Garmin;
-            ronde 3 ≥ ronde 1.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3><span class="k">FUELING</span>Eén eenheid per ronde</h3>
-        <ul>
-          <li>~51 min/ronde ≈ je uurdoel <b>75–85 g kh</b>. Reken per ronde af:
-            bidon op schema.</li>
-          <li><b>PF60 chew in ronde 1</b> (frisse maag), gels in ronde 2–3.</li>
-          <li><b>De brug Sas 4 (rondepunt) passeer je 4×</b> — je natuurlijke
-            bidonstop; leg er een reservebidon. PH 1500-hydratie apart van de kh.
-            Zie [[IRON_FRANK]] §6.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="callout">
-      <b>Taper (vandaag 23 jul).</b> De hele 90 km op racetempo hoort bij de
-      generale (week 3, gedaan). Deze week: rij <b>heen + 1 ronde + terug ≈
-      37,5 km</b> rustig — dat dekt de week-4-brick (40 km + 5 km loop). Bewaar
-      de volle drie rondes voor ná 2 augustus.
-    </div>
-
     <footer>
       <div>
-        <div>Aangelegd 23 jul 2026 · afstanden uit GPX (Komoot)</div>
-        <div>Zie training/IRON_FRANK.md</div>
+        <div>Vlak Kempens kanaalparcours · start/finish Miramar (Mol)</div>
+        <div>Afstanden uit GPX · vector-basemap © OpenStreetMap / Protomaps</div>
       </div>
       <div class="files">
-        <div>01 · IRON-FRANK-Deel1-Miramar-Sas4.gpx</div>
-        <div>02 · IRON-FRANK-Ronde-Sas4-BrugOlmenPakawi.gpx</div>
-        <div>03 · IRON-FRANK-deel3-Sas4-Miramar.gpx</div>
+        <div>90 km · 171 hm · 3 rondes</div>
+        <div>GPX: volledig + 3 delen (zie downloads)</div>
       </div>
     </footer>
   </div>
@@ -464,9 +442,8 @@ const pmProtocol=new pmtiles.Protocol();
 maplibregl.addProtocol('pmtiles', pmProtocol.tile);
 
 const ASSETS='https://protomaps.github.io/basemaps-assets';
-const FLAVORS={kleur:'light', grijs:'grayscale', donker:'dark'};   // chip -> Protomaps flavor
-let styleChoice = (matchMedia('(prefers-color-scheme:dark)').matches
-  || document.documentElement.dataset.theme==='dark') ? 'donker' : 'kleur';
+const FLAVORS={kleur:'light'};   // enkel de kleur-stijl
+let styleChoice = 'kleur';
 
 function baseStyle(){
   const flavor=FLAVORS[styleChoice];
@@ -495,9 +472,9 @@ function addRoute(){
       layout:{'line-cap':'round','line-join':'round'},
       paint:{'line-color':cssv(v),'line-width':w}});
   if(!map.getSource('poi')) map.addSource('poi',{type:'geojson',data:{type:'FeatureCollection',features:[
-    {type:'Feature',properties:{t:'Miramar',c:cssv('--ink')},geometry:{type:'Point',coordinates:ll(miramar)}},
-    {type:'Feature',properties:{t:'brug Sas 4',c:cssv('--r-ronde')},geometry:{type:'Point',coordinates:ll(sas4)}},
-    {type:'Feature',properties:{t:'Brug Olmen / Pakawi',c:cssv('--r-heen')},geometry:{type:'Point',coordinates:ll(south)}},
+    {type:'Feature',properties:{t:'Start / finish\nMiramar',c:cssv('--ink')},geometry:{type:'Point',coordinates:ll(miramar)}},
+    {type:'Feature',properties:{t:'Rondepunt · 4×\nbrug Sas 4',c:cssv('--r-ronde')},geometry:{type:'Point',coordinates:ll(sas4)}},
+    {type:'Feature',properties:{t:'Keerpunt ronde\nBrug Olmen / Pakawi',c:cssv('--r-heen')},geometry:{type:'Point',coordinates:ll(south)}},
   ]}});
   if(!map.getLayer('poi-c')) map.addLayer({id:'poi-c',type:'circle',source:'poi',
     paint:{'circle-radius':6,'circle-color':['get','c'],'circle-stroke-width':2.5,'circle-stroke-color':'#fff'}});
@@ -520,13 +497,6 @@ function buildMap(){
   map.on('load',()=>{addRoute();fitRoute();render(frac);});
   map.on('styledata',()=>{ if(map.isStyleLoaded()) addRoute(); });  // re-add route after style switch
 }
-function setStyle(choice){styleChoice=choice; if(map) map.setStyle(baseStyle());
-  document.querySelectorAll('.chip[data-style]').forEach(c=>c.classList.toggle('on',c.dataset.style===choice));}
-matchMedia('(prefers-color-scheme:dark)').addEventListener('change',e=>{
-  styleChoice = e.matches ? 'donker' : 'kleur';
-  document.querySelectorAll('.chip[data-style]').forEach(c=>c.classList.toggle('on',c.dataset.style===styleChoice));
-  if(map) map.setStyle(baseStyle());
-});
 
 // ---- full ridden sequence: heen + 3× ronde + terug ----
 const seq=[
@@ -553,7 +523,7 @@ for(const ph of seq){
   }
 }
 const TOTAL=cum;                 // metres
-const KMH=31, TOTAL_KM=TOTAL/1000;
+const KMH=30, TOTAL_KM=90;   // toon 90 km @ 30 km/u → finish ~3:00
 
 function fmt(min){const m=Math.floor(min), h=Math.floor(m/60);
   return h+':'+String(m-h*60).padStart(2,'0');}
@@ -611,15 +581,6 @@ document.querySelectorAll('.speed button').forEach(b=>{
   });
 });
 render(0);
-
-// style chips + camera-follow
-document.querySelectorAll('.chip[data-style]').forEach(c=>
-  c.addEventListener('click',()=>setStyle(c.dataset.style)));
-const followBox=document.getElementById('follow');
-if(followBox) followBox.addEventListener('change',()=>{follow=followBox.checked;});
-
-// reflect the active flavor on the chips (system theme may start dark)
-document.querySelectorAll('.chip[data-style]').forEach(c=>c.classList.toggle('on',c.dataset.style===styleChoice));
 
 buildMap();
 </script>
